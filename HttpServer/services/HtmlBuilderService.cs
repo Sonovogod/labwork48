@@ -10,7 +10,7 @@ public class HtmlBuilderService<T>
     {
         Console.WriteLine(filePath);
         string layoutPath = Path.Combine(RootDirectoryProvider.GetRootDirectoryPath(), "views/layout.html");
-        var razorService = Engine.Razor;
+        IRazorEngineService? razorService = Engine.Razor;
         
         if (!razorService.IsTemplateCached("layout", typeof(T))) // Проверяем наличие базового шаблона в кэше
             razorService.AddTemplate("layout", File.ReadAllText(layoutPath)); //Добавляем его если отсутствует
