@@ -5,7 +5,7 @@ using HttpServer.providers;
 
 namespace HttpServer.controllers;
 
-public class ServiceController : BaseController
+public class ServiceController : BaseController 
 {
     private readonly FileManager _fileManager;
 
@@ -20,7 +20,7 @@ public class ServiceController : BaseController
         {
             string filePath = Path.Combine(RootDirectoryProvider.GetRootDirectoryPath(), filename);
             var content = _fileManager.GetContent(filePath);
-            
+
             return Encoding.UTF8.GetBytes(content);
         }
         

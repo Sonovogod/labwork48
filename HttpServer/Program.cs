@@ -23,10 +23,12 @@ var commonHtmlBuilder = new HtmlBuilderService<ResponseDto<IndexViewModel>>();
 var imageController = new ImageController(fileManager);
 var homeController = new HomeController(commonHtmlBuilder);
 var serviceController = new ServiceController(fileManager);
+var addEmployeeController = new AddEmployeeController(commonHtmlBuilder);
 
 
 homeController.Controller = imageController;
 imageController.Controller = serviceController;
+serviceController.Controller = addEmployeeController;
 
 Server server = new Server(listener, homeController);
 
