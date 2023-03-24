@@ -26,8 +26,7 @@ public class HomeController : BaseController
         {
             var htmlFilePath = $"{RootDirectoryProvider.GetRootDirectoryPath()}/views/{fileName}";
             var jsonPath = $"{RootDirectoryProvider.GetRootDirectoryPath()}/data/employees.json";
-            ResponseDto<List<EmployeeViewModel>> response = _employeeService.GetAll
-                (jsonPath);
+            ResponseDto<List<EmployeeViewModel>> response = _employeeService.GetAll();
             string content = _commonHtmlBuilder.BuildHtml(fileName, htmlFilePath, response);
 
             return Encoding.UTF8.GetBytes(content);
