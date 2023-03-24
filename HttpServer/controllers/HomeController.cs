@@ -9,25 +9,32 @@ namespace HttpServer.controllers;
 
 public class HomeController : BaseController
 {
-    private readonly HtmlBuilderService<ResponseDto<IndexViewModel>> _commonHtmlBuilder;
+    private readonly EmployeeService _employeeService;
+    private readonly HtmlBuilderService<ResponseDto<List<EmployeeViewModel>>> _commonHtmlBuilder;
 
-    public HomeController(HtmlBuilderService<ResponseDto<IndexViewModel>> commonHtmlBuilder)
+    public HomeController(
+        EmployeeService employeeService, 
+        HtmlBuilderService<ResponseDto<List<EmployeeViewModel>>> commonHtmlBuilder)
     {
+        _employeeService = employeeService;
         _commonHtmlBuilder = commonHtmlBuilder;
     }
 
-    public override byte[] TryToProcessRequest(HttpListenerContext context, string filename)
+    public override byte[] TryToProcessRequest(HttpListenerContext context, string fileName)
     {
-        if (filename.Contains("index.html"))
+        if (fileName.Contains("index.html"))
         {
-            ResponseDto<IndexViewModel> responseDto = new ResponseDto<IndexViewModel>{Result = new IndexViewModel()};
-            string filePath = Path.Combine(RootDirectoryProvider.GetRootDirectoryPath(), $"views/{filename}");
-            var htmlString = _commonHtmlBuilder.BuildHtml(filename,filePath, responseDto);
-            return Encoding.UTF8.GetBytes(htmlString);
+            var htmlFilePath = $"{RootDirectoryProvider.GetRootDirectoryPath()}/views/{fileName}";
+            var jsonPath = $"{RootDirectoryProvider.GetRootDirectoryPath()}/data/employees.json";
+            ResponseDto<List<EmployeeViewModel>> response = _employeeService.GetAll
+                (jsonPath);
+            string content = _commonHtmlBuilder.BuildHtml(fileName, htmlFilePath, response);
+
+            return Encoding.UTF8.GetBytes(content);
         }
         
         if (Controller is not null) 
-            return Controller.TryToProcessRequest(context, filename);
+            return Controller.TryToProcessRequest(context, fileName);
         
         return Array.Empty<byte>();
     }

@@ -18,10 +18,12 @@ AddressConnectionProvider.Port = 8000;
 AddressConnectionProvider.Address = AddressConnectionProvider.RootDomain + AddressConnectionProvider.Port + "/";
 
 var commonHtmlBuilder = new HtmlBuilderService<ResponseDto<IndexViewModel>>();
+var employeeHtmlBuilder = new HtmlBuilderService<ResponseDto<List<EmployeeViewModel>>>();
+var employeeService = new EmployeeService(fileManager);
 
 
 var imageController = new ImageController(fileManager);
-var homeController = new HomeController(commonHtmlBuilder);
+var homeController = new HomeController(employeeService, employeeHtmlBuilder);
 var serviceController = new ServiceController(fileManager);
 var addEmployeeController = new AddEmployeeController(commonHtmlBuilder);
 

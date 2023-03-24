@@ -14,18 +14,18 @@ public class ServiceController : BaseController
         _fileManager = fileManager;
     }
 
-    public override byte[] TryToProcessRequest(HttpListenerContext context, string filename)
+    public override byte[] TryToProcessRequest(HttpListenerContext context, string fileName)
     {
-        if (filename.Contains(".css"))
+        if (fileName.Contains(".css"))
         {
-            string filePath = Path.Combine(RootDirectoryProvider.GetRootDirectoryPath(), filename);
+            string filePath = Path.Combine(RootDirectoryProvider.GetRootDirectoryPath(), fileName);
             var content = _fileManager.GetContent(filePath);
 
             return Encoding.UTF8.GetBytes(content);
         }
         
         if (Controller is not null) 
-            return Controller.TryToProcessRequest(context, filename);
+            return Controller.TryToProcessRequest(context, fileName);
         
         return Array.Empty<byte>();
     }

@@ -17,16 +17,16 @@ public class ImageController : BaseController
     private byte[] Get(string filePath)
         => _fileManager.GetImage(filePath);
 
-    public override byte[] TryToProcessRequest(HttpListenerContext context, string filename)
+    public override byte[] TryToProcessRequest(HttpListenerContext context, string fileName)
     {
-        if (filename.Contains("ico"))
+        if (fileName.Contains("ico"))
         {
-            string filePath = Path.Combine(RootDirectoryProvider.GetRootDirectoryPath(), filename);
+            string filePath = Path.Combine(RootDirectoryProvider.GetRootDirectoryPath(), fileName);
             return Get(filePath);
         }
 
         if (Controller is not null) 
-            return Controller.TryToProcessRequest(context, filename);
+            return Controller.TryToProcessRequest(context, fileName);
         
         return Array.Empty<byte>();
     }

@@ -16,18 +16,18 @@ public class AddEmployeeController : BaseController
         _commonHtmlBuilder = commonHtmlBuilder;
     }
 
-    public override byte[] TryToProcessRequest(HttpListenerContext context, string filename)
+    public override byte[] TryToProcessRequest(HttpListenerContext context, string fileName)
     {
-        if (filename.Contains("addEmployee.html"))
+        if (fileName.Contains("addEmployee.html"))
         {
             ResponseDto<IndexViewModel> responseDto = new ResponseDto<IndexViewModel>{Result = new IndexViewModel()};
-            string filePath = Path.Combine(RootDirectoryProvider.GetRootDirectoryPath(), $"views/{filename}");
-            var htmlString = _commonHtmlBuilder.BuildHtml(filename,filePath, responseDto);
+            string filePath = Path.Combine(RootDirectoryProvider.GetRootDirectoryPath(), $"views/{fileName}");
+            var htmlString = _commonHtmlBuilder.BuildHtml(fileName,filePath, responseDto);
             return Encoding.UTF8.GetBytes(htmlString);
         }
         
         if (Controller is not null) 
-            return Controller.TryToProcessRequest(context, filename);
+            return Controller.TryToProcessRequest(context, fileName);
         
         return Array.Empty<byte>();
     }
