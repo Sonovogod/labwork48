@@ -13,12 +13,12 @@ namespace HttpServer.controllers;
 
 public class AddEmployeeController : BaseController
 {
-    private readonly HtmlBuilderService<ResponseDto<List<EmployeeViewModel>>> _commonHtmlBuilder;
+    private readonly HtmlBuilderService<ResponseDto<List<EmployeeViewModel>>> _employeeHtmlBuilder;
     private readonly CreateEmployeeValidator _createEmployeeValidator;
     private readonly EmployeeService _employeeService;
-    public AddEmployeeController(HtmlBuilderService<ResponseDto<List<EmployeeViewModel>>> commonHtmlBuilder, CreateEmployeeValidator createEmployeeValidator, EmployeeService employeeService)
+    public AddEmployeeController(HtmlBuilderService<ResponseDto<List<EmployeeViewModel>>> employeeHtmlBuilder, CreateEmployeeValidator createEmployeeValidator, EmployeeService employeeService)
     {
-        _commonHtmlBuilder = commonHtmlBuilder;
+        _employeeHtmlBuilder = employeeHtmlBuilder;
         _createEmployeeValidator = createEmployeeValidator;
         _employeeService = employeeService;
     }
@@ -30,7 +30,7 @@ public class AddEmployeeController : BaseController
         if (fileName.Contains("addEmployee.html") && context.Request.HttpMethod.Equals("GET"))
         {
             ResponseDto<List<EmployeeViewModel>> responseDto = new ResponseDto<List<EmployeeViewModel>> {Result = new List<EmployeeViewModel>()};
-            var htmlString = _commonHtmlBuilder.BuildHtml(fileName,filePath, responseDto);
+            var htmlString = _employeeHtmlBuilder.BuildHtml(fileName,filePath, responseDto);
             
             return Encoding.UTF8.GetBytes(htmlString);
         }
@@ -51,8 +51,7 @@ public class AddEmployeeController : BaseController
                     Id = Guid.NewGuid()
                 };
                 
-                var response = Post(employeeViewModel);
-                var content = _commonHtmlBuilder.BuildHtml(fileName, filePath, response);
+                string content = Post(employeeViewModel, fileName, filePath);
                 return Encoding.UTF8.GetBytes(content);
             }
         }
@@ -63,7 +62,7 @@ public class AddEmployeeController : BaseController
         return Array.Empty<byte>();
     }
 
-    private ResponseDto<List<EmployeeViewModel>> Post(EmployeeViewModel model)
+    private string Post(EmployeeViewModel model, string fileName, string filePath)
     {
         ValidationResult? validationResult = _createEmployeeValidator.Validate(model);
 
@@ -72,7 +71,7 @@ public class AddEmployeeController : BaseController
             _employeeService.Create(model);
             ResponseDto<List<EmployeeViewModel>> response = _employeeService.GetAll();
             
-            return response;
+            return _employeeHtmlBuilder.BuildHtml(fileName,filePath, response);
         }
 
         ResponseDto<List<EmployeeViewModel>> viewModel = new ResponseDto<List<EmployeeViewModel>>()
@@ -80,6 +79,8 @@ public class AddEmployeeController : BaseController
             Result = new List<EmployeeViewModel>(),
             Errors = validationResult.Errors
         };
-        return viewModel;
+
+        return _employeeHtmlBuilder.BuildHtml("addEmployee.html", 
+            $"{RootDirectoryProvider.GetRootDirectoryPath()}/views/addEmployee.html", viewModel);
     }
 }

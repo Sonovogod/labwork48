@@ -6,6 +6,7 @@ using HttpServer.dto;
 using HttpServer.managers;
 using HttpServer.providers;
 using HttpServer.services;
+using HttpServer.validators;
 using HttpServer.viewModels;
 
 Console.OutputEncoding = Encoding.UTF8;
@@ -21,11 +22,13 @@ var commonHtmlBuilder = new HtmlBuilderService<ResponseDto<IndexViewModel>>();
 var employeeHtmlBuilder = new HtmlBuilderService<ResponseDto<List<EmployeeViewModel>>>();
 var employeeService = new EmployeeService(fileManager);
 
+var createEmployeeValidator = new CreateEmployeeValidator();
+
 
 var imageController = new ImageController(fileManager);
 var homeController = new HomeController(employeeService, employeeHtmlBuilder);
 var serviceController = new ServiceController(fileManager);
-var addEmployeeController = new AddEmployeeController(commonHtmlBuilder);
+var addEmployeeController = new AddEmployeeController(employeeHtmlBuilder, createEmployeeValidator, employeeService);
 
 
 homeController.Controller = imageController;
