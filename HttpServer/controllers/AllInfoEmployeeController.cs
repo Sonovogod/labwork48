@@ -22,7 +22,8 @@ public class AllInfoEmployeeController : BaseController
     public override byte[] TryToProcessRequest(HttpListenerContext context, string fileName)
     {
         string filePath = Path.Combine(RootDirectoryProvider.GetRootDirectoryPath(), $"views/{fileName}");
-        ResponseDto<List<EmployeeViewModel>> response = _employeeService.GetAll();
+        var nameValueCollection = context.Request.QueryString;
+        ResponseDto<List<EmployeeViewModel>> response = _employeeService.GetAll(nameValueCollection["filter"], nameValueCollection["Sort"]);
         
         if (fileName.Contains("employee.html") && context.Request.HttpMethod.Equals("GET"))
         {

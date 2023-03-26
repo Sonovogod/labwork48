@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 using System.Text.Json;
 using HttpServer.dto;
+using HttpServer.extantion;
 using HttpServer.managers;
 using HttpServer.models;
 using HttpServer.providers;
@@ -19,15 +20,26 @@ public class EmployeeService
         _pathToJson = $"{RootDirectoryProvider.GetRootDirectoryPath()}/data/employees.json";
     }
 
-    public ResponseDto<List<EmployeeViewModel>> GetAll()
+    public ResponseDto<List<EmployeeViewModel>> GetAll(string filter, string sort)
     {
         var jsonString = _fileManager.GetContent(_pathToJson);
         List<Employee>? employees = JsonSerializer.Deserialize<List<Employee>>(jsonString);
+        var filtered = employees.AsQueryable().WhereIf(!string.IsNullOrEmpty(filter), x=> x.Name.Contains(filter)).ToList();
+
+        switch (sort)
+        {
+            case "byName":
+                filtered = filtered.OrderBy(x => x.Name).ToList();
+                break;
+            case "byAge":
+                filtered = filtered.OrderBy(x => x.Age).ToList();
+                break;
+        }
         
         ResponseDto<List<EmployeeViewModel>> responseDto = new ResponseDto<List<EmployeeViewModel>>()
         {
-            Result = employees is null ? new List<EmployeeViewModel>() :
-                employees.Select(x => new EmployeeViewModel
+            Result = filtered is null ? new List<EmployeeViewModel>() :
+                filtered.Select(x => new EmployeeViewModel
                 {
                     About = x.About,
                     Age = x.Age,

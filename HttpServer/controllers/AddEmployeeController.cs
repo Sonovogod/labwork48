@@ -71,7 +71,8 @@ public class AddEmployeeController : BaseController
         if (validationResult.IsValid)
         {
             _employeeService.Create(model);
-            ResponseDto<List<EmployeeViewModel>> response = _employeeService.GetAll();
+            var nameValueCollection = context.Request.QueryString;
+            ResponseDto<List<EmployeeViewModel>> response = _employeeService.GetAll(nameValueCollection["filter"], nameValueCollection["Sort"]);
             var redirect =
                 $"{AddressConnectionProvider.Address}index.html";
             context.Response.Redirect(redirect);

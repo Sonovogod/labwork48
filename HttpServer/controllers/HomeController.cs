@@ -24,8 +24,9 @@ public class HomeController : BaseController
     {
         if (fileName.Contains("index.html"))
         {
+            var nameValueCollection = context.Request.QueryString;
             var htmlFilePath = $"{RootDirectoryProvider.GetRootDirectoryPath()}/views/{fileName}";
-            ResponseDto<List<EmployeeViewModel>> response = _employeeService.GetAll();
+            ResponseDto<List<EmployeeViewModel>> response = _employeeService.GetAll(nameValueCollection["filter"], nameValueCollection["Sort"]);
             string content = _commonHtmlBuilder.BuildHtml(fileName, htmlFilePath, response);
 
             return Encoding.UTF8.GetBytes(content);
