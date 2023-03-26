@@ -48,7 +48,7 @@ public class AddEmployeeController : BaseController
                     Age = int.Parse(nameValueCollection["Age"]),
                     Surname = nameValueCollection["Surname"],
                     Name = nameValueCollection["Name"],
-                    Id = Guid.NewGuid()
+                    Id = Guid.NewGuid().ToString()
                 };
                 
                 string content = Post(employeeViewModel, fileName, filePath);

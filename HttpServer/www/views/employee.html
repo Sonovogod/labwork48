@@ -1,3 +1,23 @@
 @{
 Layout="layout";
 }
+
+<div class="wrapper text-center">
+    <h1 class="text-start">Сотрудник: @Model.Result.Name</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-3 border border-info-subtle text-start">
+                Имя: @Model.Result.Name<br>
+                Фамилия: @Model.Result.Surname<br>
+                Возраст: @Model.Result.Age
+            </div>
+            <div class="col-6 border border-info-subtle">
+                <div class="card" style="width: 18rem;">
+                    <img src="http://risovach.ru/upload/2015/10/mem/uporotaya-lisa_96081084_orig_.jpg" class="card-img-top">
+                </div>
+                <h2>О нем...</h2>
+            </div>
+            <div class="col-9 bg-info bg-opacity-10 border border-info border-start-1 rounded-end">@Model.Result.About</div>
+        </div>
+    </div>
+</div>
