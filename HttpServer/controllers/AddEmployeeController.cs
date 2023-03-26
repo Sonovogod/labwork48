@@ -42,19 +42,18 @@ public class AddEmployeeController : BaseController
                 using StreamReader streamReader = new StreamReader(context.Request.InputStream, Encoding.UTF8);
                 var body = streamReader.ReadToEnd();
                 NameValueCollection nameValueCollection = HttpUtility.ParseQueryString(body);
+                int age = int.TryParse(nameValueCollection["Age"], out age) ? age : 0; 
                 EmployeeViewModel employeeViewModel = new EmployeeViewModel
                 {
                     About = nameValueCollection["About"],
-                    Age = int.Parse(nameValueCollection["Age"]),
+                    Age = age,
                     Surname = nameValueCollection["Surname"],
                     Name = nameValueCollection["Name"],
                     Id = Guid.NewGuid().ToString()
                 };
                 
-                string content = Post(employeeViewModel, fileName, filePath);
-                var redirect =
-                    $"{AddressConnectionProvider.Address}index.html";
-                context.Response.Redirect(redirect);
+                string content = Post(employeeViewModel, fileName, filePath, context);
+                
                 return Encoding.UTF8.GetBytes(content);
             }
         }
@@ -65,7 +64,7 @@ public class AddEmployeeController : BaseController
         return Array.Empty<byte>();
     }
 
-    private string Post(EmployeeViewModel model, string fileName, string filePath)
+    private string Post(EmployeeViewModel model, string fileName, string filePath, HttpListenerContext context)
     {
         ValidationResult? validationResult = _createEmployeeValidator.Validate(model);
 
@@ -73,6 +72,9 @@ public class AddEmployeeController : BaseController
         {
             _employeeService.Create(model);
             ResponseDto<List<EmployeeViewModel>> response = _employeeService.GetAll();
+            var redirect =
+                $"{AddressConnectionProvider.Address}index.html";
+            context.Response.Redirect(redirect);
 
             return _employeeHtmlBuilder.BuildHtml(fileName,filePath, response);
         }

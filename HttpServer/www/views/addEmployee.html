@@ -27,3 +27,15 @@ Layout="layout";
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+
+@{
+    if(Model.Errors.Any())
+    {
+        <div class="mt-5">
+        @foreach(var error in Model.Errors)
+        {
+            <p class="p-3 text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-3">@error.ErrorMessage</p>
+        }
+        </div>
+    }
+}
