@@ -54,7 +54,7 @@ public class EmployeeService
         };
 
         employees?.Add(newEmployee);
-        jsonString = JsonSerializer.Serialize(newEmployee);
+        jsonString = JsonSerializer.Serialize(employees);
         _fileManager.SaveData(jsonString, _pathToJson);
     }
 }

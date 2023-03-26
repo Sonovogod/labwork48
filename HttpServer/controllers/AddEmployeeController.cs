@@ -52,6 +52,9 @@ public class AddEmployeeController : BaseController
                 };
                 
                 string content = Post(employeeViewModel, fileName, filePath);
+                var redirect =
+                    $"{AddressConnectionProvider.Address}index.html";
+                context.Response.Redirect(redirect);
                 return Encoding.UTF8.GetBytes(content);
             }
         }
@@ -70,7 +73,7 @@ public class AddEmployeeController : BaseController
         {
             _employeeService.Create(model);
             ResponseDto<List<EmployeeViewModel>> response = _employeeService.GetAll();
-            
+
             return _employeeHtmlBuilder.BuildHtml(fileName,filePath, response);
         }
 
@@ -80,7 +83,6 @@ public class AddEmployeeController : BaseController
             Errors = validationResult.Errors
         };
 
-        return _employeeHtmlBuilder.BuildHtml("addEmployee.html", 
-            $"{RootDirectoryProvider.GetRootDirectoryPath()}/views/addEmployee.html", viewModel);
+        return _employeeHtmlBuilder.BuildHtml(fileName, filePath, viewModel);
     }
 }

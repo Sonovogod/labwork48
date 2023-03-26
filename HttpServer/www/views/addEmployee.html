@@ -7,22 +7,22 @@ Layout="layout";
 <form action="http://localhost:8000/addEmployee.html" method="post">
     <div class="mb-3">
         <label for="employeeName" class="form-label">Name</label>
-        <input type="text" class="form-control" id="employeeName" aria-describedby="NameHelp">
+        <input type="text" name="Name" class="form-control" id="employeeName" aria-describedby="NameHelp">
         <div id="NameHelp" class="form-text">Name has more than 1 simbol!</div>
     </div>
     <div class="mb-3">
         <label for="employeeSurname" class="form-label">Surname</label>
-        <input type="text" class="form-control" id="employeeSurname" aria-describedby="surnameHelp">
+        <input type="text" name="Surname" class="form-control" id="employeeSurname" aria-describedby="surnameHelp">
         <div id="surnameHelp" class="form-text">Surnamr has equal or more than 1 simbol!</div>
     </div>
     <div class="mb-3">
         <label for="employeeAge" class="form-label">Age</label>
-        <input type="text" class="form-control" id="employeeAge" aria-describedby="AgeHelp">
+        <input type="text" name="Age" class="form-control" id="employeeAge" aria-describedby="AgeHelp">
         <div id="AgeHelp" class="form-text">Age has between 10 and 140 years</div>
     </div>
     <div class="mb-3">
         <label for="employeeAbout" class="form-label">About</label>
-        <textarea class="form-control" id="employeeAbout" rows="3" aria-describedby="AboutHelp"></textarea>
+        <textarea class="form-control" name="About" id="employeeAbout" rows="3" aria-describedby="AboutHelp"></textarea>
         <div id="AboutHelp" class="form-text">About has more 10 simbols and no more 250 simbols</div>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
